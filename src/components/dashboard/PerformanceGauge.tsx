@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFilters } from '@/contexts/FilterContext';
 
 interface PerformanceGaugeProps {
   percentage: number;
@@ -6,6 +7,7 @@ interface PerformanceGaugeProps {
 }
 
 const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({ percentage, label = 'Finalizado' }) => {
+  const { filters, updateFilter } = useFilters();
   const isWarning = percentage < 95;
   const strokeColor = isWarning ? 'hsl(0, 84%, 60%)' : 'hsl(142, 76%, 36%)';
   
@@ -15,12 +17,20 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({ percentage, label =
   const circumference = Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
+  const handlePrazoClick = (status: 'noPrazo' | 'foraPrazo') => {
+    if (filters.prazoStatus === status) {
+      updateFilter('prazoStatus', 'all');
+    } else {
+      updateFilter('prazoStatus', status);
+    }
+  };
+
   return (
-    <div className="dashboard-card flex flex-col items-center justify-center py-6 animate-scale-in">
-      <h3 className="dashboard-card-title mb-4">Performance</h3>
+    <div className="dashboard-card flex flex-col items-center justify-center py-4 animate-scale-in">
+      <h3 className="dashboard-card-title mb-2">Performance</h3>
       
       <div className="gauge-container">
-        <svg width="200" height="120" viewBox="0 0 200 120">
+        <svg width="180" height="110" viewBox="0 0 200 120">
           {/* Background arc */}
           <path
             d="M 20 100 A 80 80 0 0 1 180 100"
@@ -50,7 +60,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({ percentage, label =
             x="100"
             y="85"
             textAnchor="middle"
-            className="text-3xl font-black fill-success"
+            className="text-2xl font-black"
             style={{ fill: strokeColor }}
           >
             {percentage.toFixed(2)}%
@@ -58,19 +68,33 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({ percentage, label =
         </svg>
       </div>
 
-      <div className="flex items-center gap-4 mt-4">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 mt-2">
+        <button
+          onClick={() => handlePrazoClick('noPrazo')}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-md border transition-all cursor-pointer ${
+            filters.prazoStatus === 'noPrazo' 
+              ? 'bg-success/20 border-success' 
+              : 'border-muted hover:border-success/50'
+          }`}
+        >
           <div className="w-3 h-3 rounded-full bg-success" />
           <span className="text-xs text-muted-foreground">No Prazo</span>
-        </div>
-        <div className="flex items-center gap-2">
+        </button>
+        <button
+          onClick={() => handlePrazoClick('foraPrazo')}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-md border transition-all cursor-pointer ${
+            filters.prazoStatus === 'foraPrazo' 
+              ? 'bg-destructive/20 border-destructive' 
+              : 'border-muted hover:border-destructive/50'
+          }`}
+        >
           <div className="w-3 h-3 rounded-full bg-destructive" />
           <span className="text-xs text-muted-foreground">Fora do Prazo</span>
-        </div>
+        </button>
       </div>
 
       {isWarning && (
-        <div className="mt-3 px-3 py-1 bg-destructive/20 border border-destructive rounded-full">
+        <div className="mt-2 px-3 py-1 bg-destructive/20 border border-destructive rounded-full">
           <span className="text-xs text-destructive font-medium">⚠️ Alerta: Abaixo de 95%</span>
         </div>
       )}

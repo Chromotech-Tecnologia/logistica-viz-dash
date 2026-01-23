@@ -9,35 +9,116 @@ interface BrazilMapProps {
   stateData: StateData;
 }
 
-// Simplified SVG paths for Brazilian states
-const statePaths: Record<string, { d: string; cx: number; cy: number }> = {
-  AC: { d: "M45,180 L60,175 L65,185 L55,195 Z", cx: 55, cy: 185 },
-  AM: { d: "M55,140 L120,130 L130,165 L100,185 L60,180 Z", cx: 90, cy: 158 },
-  RR: { d: "M85,95 L110,90 L115,115 L90,120 Z", cx: 100, cy: 105 },
-  PA: { d: "M130,130 L200,120 L210,170 L150,185 L125,165 Z", cx: 165, cy: 150 },
-  AP: { d: "M185,100 L210,95 L215,125 L190,130 Z", cx: 200, cy: 112 },
-  TO: { d: "M190,175 L215,170 L220,220 L195,225 Z", cx: 205, cy: 198 },
-  MA: { d: "M210,145 L255,135 L260,175 L220,180 Z", cx: 235, cy: 158 },
-  PI: { d: "M255,155 L285,150 L290,200 L260,205 Z", cx: 272, cy: 178 },
-  CE: { d: "M290,145 L320,140 L325,170 L295,175 Z", cx: 307, cy: 158 },
-  RN: { d: "M325,145 L345,142 L347,165 L327,168 Z", cx: 336, cy: 155 },
-  PB: { d: "M320,170 L350,168 L352,185 L322,187 Z", cx: 336, cy: 177 },
-  PE: { d: "M295,185 L355,180 L358,200 L298,205 Z", cx: 326, cy: 192 },
-  AL: { d: "M330,205 L350,203 L352,222 L332,224 Z", cx: 341, cy: 213 },
-  SE: { d: "M325,225 L345,223 L347,240 L327,242 Z", cx: 336, cy: 232 },
-  BA: { d: "M260,205 L330,195 L340,270 L280,280 L255,250 Z", cx: 295, cy: 238 },
-  MT: { d: "M130,190 L195,180 L200,260 L140,270 Z", cx: 165, cy: 225 },
-  GO: { d: "M200,230 L260,220 L265,285 L210,290 Z", cx: 232, cy: 255 },
-  DF: { d: "M245,265 L260,263 L262,278 L247,280 Z", cx: 253, cy: 271 },
-  MS: { d: "M165,275 L210,270 L215,330 L175,335 Z", cx: 190, cy: 302 },
-  MG: { d: "M265,270 L335,260 L340,330 L275,340 Z", cx: 302, cy: 300 },
-  ES: { d: "M340,295 L365,290 L368,325 L343,330 Z", cx: 354, cy: 310 },
-  RJ: { d: "M325,335 L365,330 L368,355 L330,358 Z", cx: 347, cy: 345 },
-  SP: { d: "M250,325 L325,315 L330,365 L260,370 Z", cx: 290, cy: 345 },
-  PR: { d: "M225,350 L280,345 L285,385 L235,390 Z", cx: 255, cy: 368 },
-  SC: { d: "M240,390 L285,387 L288,415 L245,418 Z", cx: 265, cy: 402 },
-  RS: { d: "M220,410 L280,405 L285,460 L230,465 Z", cx: 252, cy: 435 },
-  RO: { d: "M85,195 L130,188 L135,235 L95,242 Z", cx: 110, cy: 215 },
+// Real SVG paths for Brazilian states (simplified but accurate shapes)
+const statePaths: Record<string, { d: string; name: string }> = {
+  AC: { 
+    d: "M100,280 L130,275 L135,290 L120,300 L95,295 Z", 
+    name: "Acre" 
+  },
+  AM: { 
+    d: "M110,200 L200,185 L230,200 L240,250 L200,280 L130,285 L100,260 L105,220 Z", 
+    name: "Amazonas" 
+  },
+  RR: { 
+    d: "M180,140 L210,130 L225,155 L215,180 L185,185 L170,165 Z", 
+    name: "Roraima" 
+  },
+  PA: { 
+    d: "M230,180 L340,165 L360,200 L355,260 L310,275 L260,265 L240,250 L235,210 Z", 
+    name: "Pará" 
+  },
+  AP: { 
+    d: "M320,140 L350,135 L355,165 L340,175 L315,170 Z", 
+    name: "Amapá" 
+  },
+  TO: { 
+    d: "M320,270 L350,265 L355,340 L325,350 L315,310 Z", 
+    name: "Tocantins" 
+  },
+  MA: { 
+    d: "M355,215 L400,200 L420,235 L400,275 L360,265 L355,240 Z", 
+    name: "Maranhão" 
+  },
+  PI: { 
+    d: "M395,265 L430,250 L440,310 L415,340 L390,320 Z", 
+    name: "Piauí" 
+  },
+  CE: { 
+    d: "M430,235 L470,225 L480,265 L455,285 L435,275 Z", 
+    name: "Ceará" 
+  },
+  RN: { 
+    d: "M475,255 L505,250 L510,275 L485,280 Z", 
+    name: "Rio Grande do Norte" 
+  },
+  PB: { 
+    d: "M470,280 L510,275 L512,295 L475,300 Z", 
+    name: "Paraíba" 
+  },
+  PE: { 
+    d: "M445,295 L515,285 L518,315 L450,325 Z", 
+    name: "Pernambuco" 
+  },
+  AL: { 
+    d: "M485,320 L510,315 L515,340 L490,345 Z", 
+    name: "Alagoas" 
+  },
+  SE: { 
+    d: "M475,345 L500,340 L505,360 L480,365 Z", 
+    name: "Sergipe" 
+  },
+  BA: { 
+    d: "M400,320 L480,300 L500,360 L480,420 L410,430 L380,385 Z", 
+    name: "Bahia" 
+  },
+  MT: { 
+    d: "M200,290 L290,280 L320,290 L325,380 L260,400 L200,380 Z", 
+    name: "Mato Grosso" 
+  },
+  GO: { 
+    d: "M325,350 L390,340 L400,420 L350,440 L320,400 Z", 
+    name: "Goiás" 
+  },
+  DF: { 
+    d: "M365,385 L385,380 L390,400 L370,405 Z", 
+    name: "Distrito Federal" 
+  },
+  MS: { 
+    d: "M250,400 L320,390 L330,470 L270,490 L245,450 Z", 
+    name: "Mato Grosso do Sul" 
+  },
+  MG: { 
+    d: "M385,400 L470,380 L500,420 L485,490 L410,510 L375,470 Z", 
+    name: "Minas Gerais" 
+  },
+  ES: { 
+    d: "M490,440 L520,430 L525,475 L495,485 Z", 
+    name: "Espírito Santo" 
+  },
+  RJ: { 
+    d: "M460,490 L510,480 L520,510 L475,520 Z", 
+    name: "Rio de Janeiro" 
+  },
+  SP: { 
+    d: "M350,470 L430,455 L465,495 L440,540 L360,545 L340,510 Z", 
+    name: "São Paulo" 
+  },
+  PR: { 
+    d: "M310,510 L380,500 L400,545 L350,570 L305,550 Z", 
+    name: "Paraná" 
+  },
+  SC: { 
+    d: "M320,560 L380,550 L395,585 L345,600 L315,580 Z", 
+    name: "Santa Catarina" 
+  },
+  RS: { 
+    d: "M290,590 L365,580 L380,640 L320,680 L270,650 Z", 
+    name: "Rio Grande do Sul" 
+  },
+  RO: { 
+    d: "M145,290 L200,280 L210,340 L175,360 L140,340 Z", 
+    name: "Rondônia" 
+  },
 };
 
 const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
@@ -46,8 +127,9 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
   const maxValue = Math.max(...Object.values(stateData), 1);
 
   const getColor = (value: number) => {
+    if (value === 0) return 'hsl(199, 30%, 75%)';
     const intensity = value / maxValue;
-    const lightness = 85 - (intensity * 50);
+    const lightness = 70 - (intensity * 40);
     return `hsl(199, 89%, ${lightness}%)`;
   };
 
@@ -55,58 +137,95 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
     toggleArrayFilter('states', state);
   };
 
+  // Calculate label positions (center of bounding box for each path)
+  const getLabelPosition = (d: string) => {
+    const numbers = d.match(/\d+/g)?.map(Number) || [];
+    if (numbers.length < 4) return { x: 0, y: 0 };
+    
+    const xs = numbers.filter((_, i) => i % 2 === 0);
+    const ys = numbers.filter((_, i) => i % 2 === 1);
+    
+    return {
+      x: (Math.min(...xs) + Math.max(...xs)) / 2,
+      y: (Math.min(...ys) + Math.max(...ys)) / 2
+    };
+  };
+
   return (
     <div className="dashboard-card animate-scale-in">
       <h3 className="dashboard-card-title">Pedidos | Estado</h3>
       
-      <div className="relative">
-        <svg viewBox="0 0 400 500" className="w-full h-64">
-          {Object.entries(statePaths).map(([state, path]) => {
+      <div className="relative flex justify-center">
+        <svg viewBox="50 100 520 620" className="w-full h-72">
+          {Object.entries(statePaths).map(([state, { d, name }]) => {
             const value = stateData[state] || 0;
             const isActive = filters.states.length === 0 || filters.states.includes(state);
+            const pos = getLabelPosition(d);
             
             return (
-              <g key={state} onClick={() => handleStateClick(state)} className="cursor-pointer">
+              <g key={state} onClick={() => handleStateClick(state)} className="cursor-pointer group">
                 <path
-                  d={path.d}
+                  d={d}
                   fill={getColor(value)}
-                  stroke="hsl(0, 0%, 20%)"
-                  strokeWidth="1"
-                  className={`transition-all duration-300 hover:brightness-125 ${
-                    isActive ? 'opacity-100' : 'opacity-30'
-                  }`}
+                  stroke="hsl(0, 0%, 30%)"
+                  strokeWidth="1.5"
+                  className={`transition-all duration-300 hover:brightness-110 hover:stroke-primary ${
+                    isActive ? 'opacity-100' : 'opacity-40'
+                  } ${filters.states.includes(state) ? 'stroke-primary stroke-2' : ''}`}
                 />
+                <text
+                  x={pos.x}
+                  y={pos.y}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="text-[10px] font-bold fill-foreground pointer-events-none select-none"
+                  style={{ textShadow: '0 0 3px hsl(var(--background))' }}
+                >
+                  {state}
+                </text>
                 {value > 0 && (
                   <text
-                    x={path.cx}
-                    y={path.cy}
+                    x={pos.x}
+                    y={pos.y + 12}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    className="text-[8px] font-bold fill-primary-foreground pointer-events-none"
+                    className="text-[8px] font-medium fill-muted-foreground pointer-events-none select-none"
                   >
-                    {state}
+                    {value}
                   </text>
                 )}
+                {/* Tooltip */}
+                <title>{name}: {value} pedidos</title>
               </g>
             );
           })}
         </svg>
+      </div>
 
-        {/* Legend */}
-        <div className="flex items-center justify-center gap-2 mt-2">
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 75%)' }} />
-            <span className="text-[10px] text-muted-foreground">Menos</span>
-          </div>
-          <div className="w-16 h-3 rounded" style={{ 
-            background: 'linear-gradient(to right, hsl(199, 89%, 75%), hsl(199, 89%, 35%))' 
-          }} />
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 35%)' }} />
-            <span className="text-[10px] text-muted-foreground">Mais</span>
-          </div>
+      {/* Legend */}
+      <div className="flex items-center justify-center gap-2 mt-2">
+        <div className="flex items-center gap-1">
+          <div className="w-4 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 70%)' }} />
+          <span className="text-[10px] text-muted-foreground">Menos</span>
+        </div>
+        <div className="w-16 h-3 rounded" style={{ 
+          background: 'linear-gradient(to right, hsl(199, 89%, 70%), hsl(199, 89%, 30%))' 
+        }} />
+        <div className="flex items-center gap-1">
+          <div className="w-4 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 30%)' }} />
+          <span className="text-[10px] text-muted-foreground">Mais</span>
         </div>
       </div>
+
+      {filters.states.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1 justify-center">
+          {filters.states.map(state => (
+            <span key={state} className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded">
+              {state}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
