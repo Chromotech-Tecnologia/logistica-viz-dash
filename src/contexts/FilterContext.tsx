@@ -8,6 +8,7 @@ export interface Filters {
   modalities: string[];
   serviceTypes: string[];
   selectedPedido: string | null;
+  prazoStatus: 'all' | 'noPrazo' | 'foraPrazo';
 }
 
 interface FilterContextType {
@@ -26,6 +27,7 @@ const defaultFilters: Filters = {
   modalities: [],
   serviceTypes: [],
   selectedPedido: null,
+  prazoStatus: 'all',
 };
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);

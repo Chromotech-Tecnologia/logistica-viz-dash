@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ItemPedido } from '@/data/mockData';
+import { ItemPedido, pedidos } from '@/data/mockData';
+import { useFilters } from '@/contexts/FilterContext';
 
 interface ItemsTableProps {
   items: ItemPedido[];
@@ -10,10 +11,12 @@ type SortField = 'pedido' | 'codItem' | 'descricao' | 'subgrupo' | 'qtde' | 'vol
 type SortDirection = 'asc' | 'desc';
 
 const ItemsTable: React.FC<ItemsTableProps> = ({ items }) => {
+  const { toggleArrayFilter, filters } = useFilters();
   const [search, setSearch] = useState('');
   const [sortField, setSortField] = useState<SortField>('pedido');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRow, setSelectedRow] = useState<string | null>(null);
   const itemsPerPage = 8;
 
   const filteredAndSorted = useMemo(() => {
@@ -65,6 +68,46 @@ const ItemsTable: React.FC<ItemsTableProps> = ({ items }) => {
       <ChevronDown className="w-3 h-3 inline ml-1" />;
   };
 
+  const handleRowClick = (item: ItemPedido) => {
+    // Find the pedido that this item belongs to
+    const pedido = pedidos.find(p => p.pedido === item.pedido);
+    if (!pedido) return;
+
+    // Toggle selection and apply filters
+    const rowKey = `${item.pedido}-${item.codItem}`;
+    if (selectedRow === rowKey) {
+      setSelectedRow(null);
+      // Clear the filters
+      if (filters.states.includes(pedido.estado)) {
+        toggleArrayFilter('states', pedido.estado);
+      }
+      if (filters.modalities.includes(pedido.modalidade)) {
+        toggleArrayFilter('modalities', pedido.modalidade);
+      }
+      if (filters.serviceTypes.includes(pedido.tipoServico)) {
+        toggleArrayFilter('serviceTypes', pedido.tipoServico);
+      }
+      if (filters.regions.includes(pedido.regiao)) {
+        toggleArrayFilter('regions', pedido.regiao);
+      }
+    } else {
+      setSelectedRow(rowKey);
+      // Apply filters based on the related pedido
+      if (!filters.states.includes(pedido.estado)) {
+        toggleArrayFilter('states', pedido.estado);
+      }
+      if (!filters.modalities.includes(pedido.modalidade)) {
+        toggleArrayFilter('modalities', pedido.modalidade);
+      }
+      if (!filters.serviceTypes.includes(pedido.tipoServico)) {
+        toggleArrayFilter('serviceTypes', pedido.tipoServico);
+      }
+      if (!filters.regions.includes(pedido.regiao)) {
+        toggleArrayFilter('regions', pedido.regiao);
+      }
+    }
+  };
+
   return (
     <div className="dashboard-card animate-fade-in">
       <div className="flex items-center justify-between mb-3">
@@ -108,19 +151,25 @@ const ItemsTable: React.FC<ItemsTableProps> = ({ items }) => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((item, index) => (
-              <tr
-                key={`${item.pedido}-${item.codItem}-${index}`}
-                className="table-row-interactive border-b border-muted/30"
-              >
-                <td className="py-2 px-2 text-primary font-medium">{item.pedido}</td>
-                <td className="py-2 px-2 text-card-foreground">{item.codItem}</td>
-                <td className="py-2 px-2 text-card-foreground truncate max-w-32">{item.descricao}</td>
-                <td className="py-2 px-2 text-card-foreground">{item.subgrupo}</td>
-                <td className="py-2 px-2 text-card-foreground text-right">{item.qtde}</td>
-                <td className="py-2 px-2 text-card-foreground text-right">{item.volumeTotal}</td>
-              </tr>
-            ))}
+            {paginatedData.map((item, index) => {
+              const rowKey = `${item.pedido}-${item.codItem}`;
+              return (
+                <tr
+                  key={`${item.pedido}-${item.codItem}-${index}`}
+                  onClick={() => handleRowClick(item)}
+                  className={`table-row-interactive border-b border-muted/30 ${
+                    selectedRow === rowKey ? 'bg-primary/20' : ''
+                  }`}
+                >
+                  <td className="py-2 px-2 text-primary font-medium">{item.pedido}</td>
+                  <td className="py-2 px-2 text-card-foreground">{item.codItem}</td>
+                  <td className="py-2 px-2 text-card-foreground truncate max-w-32">{item.descricao}</td>
+                  <td className="py-2 px-2 text-card-foreground">{item.subgrupo}</td>
+                  <td className="py-2 px-2 text-card-foreground text-right">{item.qtde}</td>
+                  <td className="py-2 px-2 text-card-foreground text-right">{item.volumeTotal}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -139,11 +188,11 @@ const ItemsTable: React.FC<ItemsTableProps> = ({ items }) => {
             <ChevronLeft className="w-4 h-4 text-muted-foreground" />
           </button>
           <span className="text-xs text-muted-foreground">
-            {currentPage} / {totalPages}
+            {currentPage} / {totalPages || 1}
           </span>
           <button
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages || totalPages === 0}
             className="p-1 rounded hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             <ChevronRight className="w-4 h-4 text-muted-foreground" />

@@ -54,7 +54,7 @@ const generatePedidos = (): Pedido[] => {
     const regiao = regioes[Math.floor(Math.random() * regioes.length)];
     const estadosRegiao = estados[regiao];
     const estado = estadosRegiao[Math.floor(Math.random() * estadosRegiao.length)];
-    const noPrazo = Math.random() > 0.0075; // 99.25% no prazo
+    const noPrazo = Math.random() > 0.10; // 90% no prazo, 10% fora
 
     pedidos.push({
       id: `PED-${100000 + i}`,

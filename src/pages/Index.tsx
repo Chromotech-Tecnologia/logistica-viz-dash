@@ -53,6 +53,13 @@ const DashboardContent: React.FC = () => {
         if (!filters.serviceTypes.includes(pedido.tipoServico)) return false;
       }
 
+      // Filter by prazo status
+      if (filters.prazoStatus === 'noPrazo') {
+        if (!pedido.noPrazo) return false;
+      } else if (filters.prazoStatus === 'foraPrazo') {
+        if (pedido.noPrazo) return false;
+      }
+
       return true;
     });
   }, [filters]);
@@ -69,7 +76,7 @@ const DashboardContent: React.FC = () => {
   const stateData = getStateDistribution(filteredPedidos);
 
   const statusData = [
-    { label: 'Finalizado', value: filteredPedidos.filter(p => p.status === 'FINALIZADO').length },
+    { label: 'FINALIZADO', value: filteredPedidos.filter(p => p.status === 'FINALIZADO').length },
   ];
 
   return (
@@ -77,61 +84,77 @@ const DashboardContent: React.FC = () => {
       {/* Main Grid */}
       <main className="pt-32 px-4 pb-8">
         <div className="max-w-[1800px] mx-auto">
-          <div className="grid grid-cols-12 gap-4">
+          <div className="grid grid-cols-12 gap-3">
             
-            {/* Left Column */}
-            <div className="col-span-12 lg:col-span-3 space-y-4">
-              {/* Main Metrics */}
+            {/* Row 1 - Metrics, Status, Performance, Pie Chart, Table */}
+            <div className="col-span-12 lg:col-span-2">
               <MetricCard
                 title="Quantidade de Pedidos"
                 value={metrics.total}
                 size="lg"
               />
-              
-              <div className="grid grid-cols-2 gap-4">
-                <MetricCard
-                  title="Qtde no Prazo"
-                  value={metrics.noPrazo}
-                  percentage={`${metrics.percentualNoPrazo.toFixed(2)}%`}
-                  variant="success"
-                  size="sm"
-                />
-                <MetricCard
-                  title="Qtde fora do Prazo"
-                  value={metrics.foraPrazo}
-                  percentage={`${metrics.percentualForaPrazo.toFixed(2)}%`}
-                  variant={metrics.percentualForaPrazo > 5 ? 'danger' : 'default'}
-                  size="sm"
-                />
-              </div>
+            </div>
+            
+            <div className="col-span-6 lg:col-span-1">
+              <MetricCard
+                title="Qtde no Prazo"
+                value={metrics.noPrazo}
+                percentage={`${metrics.percentualNoPrazo.toFixed(2)}%`}
+                variant="success"
+                size="sm"
+              />
+            </div>
+            
+            <div className="col-span-6 lg:col-span-1">
+              <MetricCard
+                title="Qtde fora do Prazo"
+                value={metrics.foraPrazo}
+                percentage={`${metrics.percentualForaPrazo.toFixed(2)}%`}
+                variant={metrics.percentualForaPrazo > 5 ? 'danger' : 'default'}
+                size="sm"
+              />
+            </div>
 
+            <div className="col-span-12 lg:col-span-2">
+              <RegionPieChart data={regionData} />
+            </div>
+
+            <div className="col-span-12 lg:col-span-6 row-span-2">
+              <PedidosTable pedidos={filteredPedidos} title="Pedidos Consolidados" />
+            </div>
+
+            {/* Row 2 - Status and Performance */}
+            <div className="col-span-12 lg:col-span-2">
               <StatusCard data={statusData} />
+            </div>
+            
+            <div className="col-span-12 lg:col-span-2">
               <PerformanceGauge percentage={metrics.percentualNoPrazo} />
             </div>
 
-            {/* Center Column */}
-            <div className="col-span-12 lg:col-span-5 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <HorizontalBarChart
-                  data={modalityData}
-                  title="Pedidos | Modalidade"
-                  filterKey="modalities"
-                />
-                <HorizontalBarChart
-                  data={serviceTypeData}
-                  title="Pedidos | Tipo de Serviço"
-                  filterKey="serviceTypes"
-                />
-              </div>
-              
-              <ItemsTable items={filteredItems} />
+            {/* Row 3 - Bar Charts and Map */}
+            <div className="col-span-12 lg:col-span-2">
+              <HorizontalBarChart
+                data={modalityData}
+                title="Pedidos | Modalidade"
+                filterKey="modalities"
+              />
+            </div>
+            
+            <div className="col-span-12 lg:col-span-2">
+              <HorizontalBarChart
+                data={serviceTypeData}
+                title="Pedidos | Tipo de Serviço"
+                filterKey="serviceTypes"
+              />
             </div>
 
-            {/* Right Column */}
-            <div className="col-span-12 lg:col-span-4 space-y-4">
-              <RegionPieChart data={regionData} />
-              <PedidosTable pedidos={filteredPedidos} title="Pedidos Consolidados" />
+            <div className="col-span-12 lg:col-span-2">
               <BrazilMap stateData={stateData} />
+            </div>
+
+            <div className="col-span-12 lg:col-span-6">
+              <ItemsTable items={filteredItems} />
             </div>
           </div>
         </div>

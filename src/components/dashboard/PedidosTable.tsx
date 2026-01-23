@@ -18,12 +18,13 @@ type SortField = 'nMov' | 'pedido' | 'tipoServico' | 'modalidade' | 'cidadeOrige
 type SortDirection = 'asc' | 'desc';
 
 const PedidosTable: React.FC<PedidosTableProps> = ({ pedidos, title }) => {
-  const { updateFilter } = useFilters();
+  const { toggleArrayFilter, filters } = useFilters();
   const [search, setSearch] = useState('');
   const [sortField, setSortField] = useState<SortField>('nMov');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<string | null>(null);
   const itemsPerPage = 10;
 
   const filteredAndSorted = useMemo(() => {
@@ -73,7 +74,38 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedidos, title }) => {
   };
 
   const handleRowClick = (pedido: Pedido) => {
-    updateFilter('selectedPedido', pedido.id);
+    // Toggle selection and apply multiple filters
+    if (selectedRow === pedido.id) {
+      setSelectedRow(null);
+      // Clear the filters that were applied
+      if (filters.states.includes(pedido.estado)) {
+        toggleArrayFilter('states', pedido.estado);
+      }
+      if (filters.modalities.includes(pedido.modalidade)) {
+        toggleArrayFilter('modalities', pedido.modalidade);
+      }
+      if (filters.serviceTypes.includes(pedido.tipoServico)) {
+        toggleArrayFilter('serviceTypes', pedido.tipoServico);
+      }
+      if (filters.regions.includes(pedido.regiao)) {
+        toggleArrayFilter('regions', pedido.regiao);
+      }
+    } else {
+      setSelectedRow(pedido.id);
+      // Apply filters based on the row clicked
+      if (!filters.states.includes(pedido.estado)) {
+        toggleArrayFilter('states', pedido.estado);
+      }
+      if (!filters.modalities.includes(pedido.modalidade)) {
+        toggleArrayFilter('modalities', pedido.modalidade);
+      }
+      if (!filters.serviceTypes.includes(pedido.tipoServico)) {
+        toggleArrayFilter('serviceTypes', pedido.tipoServico);
+      }
+      if (!filters.regions.includes(pedido.regiao)) {
+        toggleArrayFilter('regions', pedido.regiao);
+      }
+    }
   };
 
   const TableContent = () => (
@@ -131,7 +163,9 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedidos, title }) => {
               <tr
                 key={pedido.id}
                 onClick={() => handleRowClick(pedido)}
-                className="table-row-interactive border-b border-muted/30"
+                className={`table-row-interactive border-b border-muted/30 ${
+                  selectedRow === pedido.id ? 'bg-primary/20' : ''
+                }`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <td className="py-2 px-2 text-primary font-medium">{pedido.nMov}</td>
@@ -160,11 +194,11 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedidos, title }) => {
             <ChevronLeft className="w-4 h-4 text-muted-foreground" />
           </button>
           <span className="text-xs text-muted-foreground">
-            {currentPage} / {totalPages}
+            {currentPage} / {totalPages || 1}
           </span>
           <button
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalPages || totalPages === 0}
             className="p-1 rounded hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
