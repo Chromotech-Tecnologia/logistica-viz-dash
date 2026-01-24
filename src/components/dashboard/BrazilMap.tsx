@@ -127,10 +127,10 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
   const maxValue = Math.max(...Object.values(stateData), 1);
 
   const getColor = (value: number) => {
-    if (value === 0) return 'hsl(199, 30%, 75%)';
+    if (value === 0) return 'hsl(45, 30%, 20%)';
     const intensity = value / maxValue;
-    const lightness = 70 - (intensity * 40);
-    return `hsl(199, 89%, ${lightness}%)`;
+    const lightness = 25 + (intensity * 35);
+    return `hsl(45, 100%, ${lightness}%)`;
   };
 
   const handleStateClick = (state: string) => {
@@ -152,11 +152,11 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
   };
 
   return (
-    <div className="dashboard-card animate-scale-in">
+    <div className="dashboard-card h-full animate-scale-in flex flex-col">
       <h3 className="dashboard-card-title">Pedidos | Estado</h3>
       
-      <div className="relative flex justify-center">
-        <svg viewBox="50 100 520 620" className="w-full h-72">
+      <div className="flex-1 relative flex justify-center items-center min-h-0">
+        <svg viewBox="50 100 520 620" className="w-full h-full max-h-[280px]" preserveAspectRatio="xMidYMid meet">
           {Object.entries(statePaths).map(([state, { d, name }]) => {
             const value = stateData[state] || 0;
             const isActive = filters.states.length === 0 || filters.states.includes(state);
@@ -167,33 +167,22 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
                 <path
                   d={d}
                   fill={getColor(value)}
-                  stroke="hsl(0, 0%, 30%)"
-                  strokeWidth="1.5"
-                  className={`transition-all duration-300 hover:brightness-110 hover:stroke-primary ${
-                    isActive ? 'opacity-100' : 'opacity-40'
-                  } ${filters.states.includes(state) ? 'stroke-primary stroke-2' : ''}`}
+                  stroke="hsl(45, 100%, 50%)"
+                  strokeWidth="1"
+                  className={`transition-all duration-300 hover:brightness-125 ${
+                    isActive ? 'opacity-100' : 'opacity-30'
+                  } ${filters.states.includes(state) ? 'stroke-2' : ''}`}
                 />
                 <text
                   x={pos.x}
                   y={pos.y}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="text-[10px] font-bold fill-foreground pointer-events-none select-none"
-                  style={{ textShadow: '0 0 3px hsl(var(--background))' }}
+                  className="text-[9px] font-bold pointer-events-none select-none"
+                  fill={value > maxValue * 0.5 ? 'hsl(0, 0%, 4%)' : 'hsl(45, 100%, 50%)'}
                 >
                   {state}
                 </text>
-                {value > 0 && (
-                  <text
-                    x={pos.x}
-                    y={pos.y + 12}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    className="text-[8px] font-medium fill-muted-foreground pointer-events-none select-none"
-                  >
-                    {value}
-                  </text>
-                )}
                 {/* Tooltip */}
                 <title>{name}: {value} pedidos</title>
               </g>
@@ -203,16 +192,16 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center justify-center gap-2 mt-2">
+      <div className="flex items-center justify-center gap-2 mt-2 pt-2 border-t border-muted">
         <div className="flex items-center gap-1">
-          <div className="w-4 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 70%)' }} />
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(45, 100%, 25%)' }} />
           <span className="text-[10px] text-muted-foreground">Menos</span>
         </div>
-        <div className="w-16 h-3 rounded" style={{ 
-          background: 'linear-gradient(to right, hsl(199, 89%, 70%), hsl(199, 89%, 30%))' 
+        <div className="w-12 h-3 rounded" style={{ 
+          background: 'linear-gradient(to right, hsl(45, 100%, 25%), hsl(45, 100%, 60%))' 
         }} />
         <div className="flex items-center gap-1">
-          <div className="w-4 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 30%)' }} />
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(45, 100%, 60%)' }} />
           <span className="text-[10px] text-muted-foreground">Mais</span>
         </div>
       </div>
@@ -220,9 +209,13 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
       {filters.states.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1 justify-center">
           {filters.states.map(state => (
-            <span key={state} className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded">
-              {state}
-            </span>
+            <button
+              key={state}
+              onClick={() => handleStateClick(state)}
+              className="text-[10px] bg-primary text-primary-foreground px-2 py-0.5 rounded-full hover:bg-primary/80 transition-colors"
+            >
+              {state} ✕
+            </button>
           ))}
         </div>
       )}

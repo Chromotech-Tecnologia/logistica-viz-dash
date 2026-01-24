@@ -82,20 +82,17 @@ const DashboardContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Main Grid */}
-      <main className="pt-32 px-4 pb-8">
+      <main className="pt-28 lg:pt-32 px-3 lg:px-4 pb-8">
         <div className="max-w-[1800px] mx-auto">
-          <div className="grid grid-cols-12 gap-3">
-            
-            {/* Row 1 - Metrics, Status, Performance, Pie Chart, Table */}
-            <div className="col-span-12 lg:col-span-2">
-              <MetricCard
-                title="Quantidade de Pedidos"
-                value={metrics.total}
-                size="lg"
-              />
-            </div>
-            
-            <div className="col-span-6 lg:col-span-1">
+          {/* Mobile Layout - Single Column */}
+          <div className="grid grid-cols-1 lg:hidden gap-3">
+            {/* Metrics */}
+            <MetricCard
+              title="Quantidade de Pedidos"
+              value={metrics.total}
+              size="lg"
+            />
+            <div className="grid grid-cols-2 gap-3">
               <MetricCard
                 title="Qtde no Prazo"
                 value={metrics.noPrazo}
@@ -103,9 +100,6 @@ const DashboardContent: React.FC = () => {
                 variant="success"
                 size="sm"
               />
-            </div>
-            
-            <div className="col-span-6 lg:col-span-1">
               <MetricCard
                 title="Qtde fora do Prazo"
                 value={metrics.foraPrazo}
@@ -114,34 +108,73 @@ const DashboardContent: React.FC = () => {
                 size="sm"
               />
             </div>
+            <PerformanceGauge percentage={metrics.percentualNoPrazo} />
+            <RegionPieChart data={regionData} />
+            <StatusCard data={statusData} />
+            <HorizontalBarChart
+              data={modalityData}
+              title="Pedidos | Modalidade"
+              filterKey="modalities"
+            />
+            <HorizontalBarChart
+              data={serviceTypeData}
+              title="Pedidos | Tipo de Serviço"
+              filterKey="serviceTypes"
+            />
+            <BrazilMap stateData={stateData} />
+            <PedidosTable pedidos={filteredPedidos} title="Pedidos Consolidados" />
+            <ItemsTable items={filteredItems} />
+          </div>
 
-            <div className="col-span-12 lg:col-span-2">
+          {/* Desktop Layout - Matching Reference Image */}
+          <div className="hidden lg:grid grid-cols-12 gap-3">
+            {/* Row 1: Metrics + Pie Chart + Table */}
+            <div className="col-span-2 flex flex-col gap-3">
+              <div className="min-h-[120px]">
+                <MetricCard
+                  title="Quantidade de Pedidos"
+                  value={metrics.total}
+                  size="lg"
+                />
+              </div>
+              <div className="min-h-[90px]">
+                <MetricCard
+                  title="Qtde no Prazo"
+                  value={metrics.noPrazo}
+                  percentage={`${metrics.percentualNoPrazo.toFixed(2)}%`}
+                  variant="success"
+                  size="sm"
+                />
+              </div>
+              <div className="min-h-[90px]">
+                <MetricCard
+                  title="Qtde fora do Prazo"
+                  value={metrics.foraPrazo}
+                  percentage={`${metrics.percentualForaPrazo.toFixed(2)}%`}
+                  variant={metrics.percentualForaPrazo > 5 ? 'danger' : 'default'}
+                  size="sm"
+                />
+              </div>
+            </div>
+            
+            <div className="col-span-2 min-h-[320px]">
               <RegionPieChart data={regionData} />
             </div>
 
-            <div className="col-span-12 lg:col-span-6 row-span-2">
+            <div className="col-span-5 min-h-[320px]">
               <PedidosTable pedidos={filteredPedidos} title="Pedidos Consolidados" />
             </div>
 
-            {/* Row 2 - Status and Performance */}
-            <div className="col-span-12 lg:col-span-2">
+            <div className="col-span-3 min-h-[320px]">
+              <BrazilMap stateData={stateData} />
+            </div>
+
+            {/* Row 2: Status, Bar Charts, Performance, Items Table */}
+            <div className="col-span-2 min-h-[260px]">
               <StatusCard data={statusData} />
             </div>
             
-            <div className="col-span-12 lg:col-span-2">
-              <PerformanceGauge percentage={metrics.percentualNoPrazo} />
-            </div>
-
-            {/* Row 3 - Bar Charts and Map */}
-            <div className="col-span-12 lg:col-span-2">
-              <HorizontalBarChart
-                data={modalityData}
-                title="Pedidos | Modalidade"
-                filterKey="modalities"
-              />
-            </div>
-            
-            <div className="col-span-12 lg:col-span-2">
+            <div className="col-span-2 min-h-[260px]">
               <HorizontalBarChart
                 data={serviceTypeData}
                 title="Pedidos | Tipo de Serviço"
@@ -149,11 +182,19 @@ const DashboardContent: React.FC = () => {
               />
             </div>
 
-            <div className="col-span-12 lg:col-span-2">
-              <BrazilMap stateData={stateData} />
+            <div className="col-span-2 min-h-[260px]">
+              <PerformanceGauge percentage={metrics.percentualNoPrazo} />
+            </div>
+            
+            <div className="col-span-2 min-h-[260px]">
+              <HorizontalBarChart
+                data={modalityData}
+                title="Pedidos | Modalidade"
+                filterKey="modalities"
+              />
             </div>
 
-            <div className="col-span-12 lg:col-span-6">
+            <div className="col-span-4 min-h-[260px]">
               <ItemsTable items={filteredItems} />
             </div>
           </div>
