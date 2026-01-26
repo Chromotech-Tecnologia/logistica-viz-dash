@@ -33,7 +33,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
       <div className="flex items-baseline gap-2">
         <span className={cn(
           'font-black tracking-tight',
-          size === 'lg' ? 'text-5xl' : 'text-3xl',
+          size === 'lg' ? 'text-4xl' : 'text-3xl',
           variantStyles[variant]
         )}>
           {value}
