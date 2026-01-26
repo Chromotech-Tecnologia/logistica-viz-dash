@@ -245,8 +245,8 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedidos, title }) => {
 
   return (
     <>
-      <div className="dashboard-card animate-fade-in h-full min-h-[380px]">
-        <TableContent maxHeight={280} />
+      <div className="dashboard-card animate-fade-in h-full flex flex-col overflow-hidden">
+        <TableContent maxHeight={180} />
       </div>
 
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
