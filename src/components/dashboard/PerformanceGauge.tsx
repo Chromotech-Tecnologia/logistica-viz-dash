@@ -26,7 +26,7 @@ const PerformanceGauge: React.FC<PerformanceGaugeProps> = ({ percentage, label =
   };
 
   return (
-    <div className="dashboard-card flex flex-col items-center justify-center py-4 animate-scale-in">
+    <div className="dashboard-card flex flex-col items-center justify-center py-4 animate-scale-in h-full">
       <h3 className="dashboard-card-title mb-2">Performance</h3>
       
       <div className="gauge-container">

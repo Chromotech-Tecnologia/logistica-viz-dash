@@ -23,7 +23,7 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ data, title, fi
   };
 
   return (
-    <div className="dashboard-card animate-slide-up">
+    <div className="dashboard-card animate-slide-up h-full flex flex-col">
       <h3 className="dashboard-card-title">{title}</h3>
       
       <div className="space-y-3">

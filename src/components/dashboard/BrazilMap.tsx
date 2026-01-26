@@ -9,181 +9,164 @@ interface BrazilMapProps {
   stateData: StateData;
 }
 
-// Real SVG paths for Brazilian states (simplified but accurate shapes)
+// Paths SVG precisos do mapa do Brasil (IBGE)
 const statePaths: Record<string, { d: string; name: string }> = {
-  AC: { 
-    d: "M100,280 L130,275 L135,290 L120,300 L95,295 Z", 
-    name: "Acre" 
+  AC: {
+    d: "M115.7,211.5l-1.8-5.3l-6.4-3.3l-4.4-0.1l-5.3,3.4l-6.3,0.3l-3.1-1.4l-0.6-2.7l-2.9-0.6l-1.1-3.7l-4.5-4.4l0.2-3.2l-2.5-2.2l3.8-5.8l1-7l5.7,0.5l8.5,2l9.7,0.3l4.9,1.5l3.9,5.7l4.6,2.7l0.8,3.2l5.9,2.6l0.9,5.3l-3.1,8.3l-4.9,3.1L115.7,211.5z",
+    name: "Acre"
   },
-  AM: { 
-    d: "M110,200 L200,185 L230,200 L240,250 L200,280 L130,285 L100,260 L105,220 Z", 
-    name: "Amazonas" 
+  AM: {
+    d: "M233.2,178.3l-4.9-0.8l-8.4,3.9l-5.5-0.3l-4.1-3.3l-13.4-3.9l-7.7,1.8l-4.7-2.5l-2.8,1.1l-3.5-1.9l-10.9,2.7l-4.5-1.2l-1.9,2.9l-6.6,0.7l-3.1-4l-6.9-1.4l-2.1,2l-7.7-0.9l-4.2,3.7l-4.9-0.6l-1.9,3.6l-5.4,1.9l-5.9-0.6l-1,7l-3.8,5.8l2.5,2.2l-0.2,3.2l4.5,4.4l1.1,3.7l2.9,0.6l0.6,2.7l3.1,1.4l6.3-0.3l5.3-3.4l4.4,0.1l6.4,3.3l1.8,5.3l4.9,0.5l4.9-3.1l6.9,1.9l2.4-2.7l3.8,0.1l2.2,2.9l6.4-0.2l2.9-5.6l7.2-1.9l1.3-3.7l6.5-3.4l5.9,2.6l4.7-0.8l0.2-4.9l2.7-1.3l2.3,1.6l4.5-2.5l-0.8-3.7l8.7-0.5l1-3.4l9.9-2.9l0.9-2.9l3.1-0.1l0.9-3.7l-4.9-6.5l-2.1-6.9L233.2,178.3z",
+    name: "Amazonas"
   },
-  RR: { 
-    d: "M180,140 L210,130 L225,155 L215,180 L185,185 L170,165 Z", 
-    name: "Roraima" 
+  RR: {
+    d: "M165.9,113.9l0.5-7.8l-2.9-4.5l-2.5-0.1l-5.4,4.4l-2.9-0.6l0.7-5.6l-4.3-3.7l-0.2-8.6l-2.4-1.2l-0.3-3.9l2.4-3.7l5.2-1l2.3,1.9l3.7-2.9l5.7,7.9l4.6,0.1l3.9,3.1l6,0.3l-0.2,3.9l2.7,1.7l3.7-1.8l5.7,5.7l4.9,1.2l0.8,7.9l3.9,6.7l-1.3,2.9l-8.8,3.6l-2.9,4.6l-3.9-2.7l-7.4,0.5l-0.7-4.3l-4.9-2.3L165.9,113.9z",
+    name: "Roraima"
   },
-  PA: { 
-    d: "M230,180 L340,165 L360,200 L355,260 L310,275 L260,265 L240,250 L235,210 Z", 
-    name: "Pará" 
+  PA: {
+    d: "M320.7,209l-1.3-6.7l-5.5-1.9l-2.6-3.9l1.8-5.3l-4.2-0.9l-3.7,1.9l-3.1-0.4l-3,2.9l-2.3-0.7l-6.9,3.6l-5-2.1l-4.9-0.3l-3.1-3.9l-4.1-1.9l-0.5-4.9l-7.8-0.3l-2.9,4.6l-7.3,0.6l-1.7,4.5l-5.5-0.1l-2.7-3.9l-5.1,0.3l-4.9-6.5l-2.1-6.9l0.5-3.5l4.9,0.8l6.5-5.7l5.1,0.2l4.1-4.5l-0.4-4.1l4.7-2.2l0.8-4.6l-6.3-3.2l-1.2-5.7l-3.7-3.7l3.9-6.7l-0.8-7.9l-4.9-1.2l-5.7-5.7l9.2-0.9l7.7,4.9l3.9-1.2l5.3,2.2l9.9,0.2l6.9,2.9l1.7-3.4l8,0.2l0.5-3.6l8.9,0.3l2.5,2.7l0.2,5.1l3.3,0.3l5.3-3.7l5.7,1l4.2,4.7l7.5,2.9l2.7-0.9l2.9,3.5l5.5,0.2l0.8-2.7l3.1,0.3l3,4.9l-0.5,3.9l4.9,0.2l0.2,3.9l-4.7,2.5l-3.4,8.7l-4.4,1l-1.9,4.1l-4.6,1.1l-1.1,4.9l-4.4,4.4l0.3,5.7l5.3,3.9l-0.5,4.2l-11.9,0.5l-1.9,3.4l-5.3,0.5l-3.3,4.1L320.7,209z",
+    name: "Pará"
   },
-  AP: { 
-    d: "M320,140 L350,135 L355,165 L340,175 L315,170 Z", 
-    name: "Amapá" 
+  AP: {
+    d: "M307.1,98.4l-2.9-6.1l-4.9-0.9l-4.1-4.7l-3.1,0.8l-1.7-4.5l1.5-5.9l3.9-3.4l0.7-5.7l5.8-5.9l4.9,0.1l6.4,3.7l1.1,5.3l2.6,1.2l4.7,6.6l-1.2,3.5l-4.7-1l-0.5,4.1l-3.4,2.9l0.8,5l-1.9,2.9L307.1,98.4z",
+    name: "Amapá"
   },
-  TO: { 
-    d: "M320,270 L350,265 L355,340 L325,350 L315,310 Z", 
-    name: "Tocantins" 
+  TO: {
+    d: "M319.3,272.7l-2.6,0.7l-4.3-3.9l-2.6,1.3l-0.5,4.6l-3.1,5.7l0.5,3.7l-6.9,0.8l-6.1,7.1l-1.1,10.2l2.9,9.6l0.7,8.9l4.3,4.4l-0.7,5.3l6.4,7.1l0.5,5.4l7.9,1.7l4.6-4.9l7.5-0.2l2.7-3.1l4.4,1.1l5.1-6l0.5-9.7l-1.7-8.5l-5-2.3l-4.4-4.2l-0.8-10.1l3.4-2.1l-1.4-4.1l4.4-8.4l-2.2-4.9l-6.4,0.3L319.3,272.7z",
+    name: "Tocantins"
   },
-  MA: { 
-    d: "M355,215 L400,200 L420,235 L400,275 L360,265 L355,240 Z", 
-    name: "Maranhão" 
+  MA: {
+    d: "M370.5,221.9l-2.3-4.1l-8.2-3.9l-1.5-5.2l-7.9-2.7l-7.9,0.5l1.9-3.4l11.9-0.5l0.5-4.2l-5.3-3.9l-0.3-5.7l4.4-4.4l1.1-4.9l4.6-1.1l1.9-4.1l4.4-1l3.4-8.7l4.7-2.5l5.4,1.1l2.3,3.3l3.7-1.4l4.3,0.9l3.5,4.5l4.2-1.7l2.9,0.4l-1.7,5.7l1.9,2.9l7.9,2.6l2.2,7.5l4.7,5.8l-0.7,7.2l-3.6,3.7l-0.7,4.7l-3.2,4.4l-2.1,7.2l3.7,2l-4.9,4.2l-1.9,5.5l-1.9,0.3l-2.3-4.3l-6.6-0.9l-2.9-5.7l-5.1,0.3l-6.1-1.9L370.5,221.9z",
+    name: "Maranhão"
   },
-  PI: { 
-    d: "M395,265 L430,250 L440,310 L415,340 L390,320 Z", 
-    name: "Piauí" 
+  PI: {
+    d: "M410.2,271.7l-0.3-2.9l-3.7-2l2.1-7.2l3.2-4.4l0.7-4.7l3.6-3.7l0.7-7.2l-4.7-5.8l-2.2-7.5l5.1,0.4l2.1-1.9l4.5,0.9l3.4-3.1l3.9,0.3l1.9-3.5l5.3,0.6l1.7-2.9l6.6,0.3l-0.7,3.8l2.1,4.7l-1.6,6.5l0.9,5.5l3.7,4.5l0.2,6.4l4.6,4.5l-0.7,5.7l-1.1,1.1l-0.2,12.7l-3.2,0.9l-7.6,10.1l-7.7,0.3l-2.1-3.5l-4.9,0.4l-5-3.8l-3.3,2.3l-2.7-0.5L410.2,271.7z",
+    name: "Piauí"
   },
-  CE: { 
-    d: "M430,235 L470,225 L480,265 L455,285 L435,275 Z", 
-    name: "Ceará" 
+  CE: {
+    d: "M450.9,217.9l-1.7,2.9l-5.3-0.6l-1.9,3.5l-3.9-0.3l-3.4,3.1l-4.5-0.9l-2.1,1.9l-5.1-0.4l-7.9-2.6l-1.9-2.9l1.7-5.7l-2.9-0.4l-4.2,1.7l6-7.9l6.5-2.5l4.5,0.8l4.6-4.9l6.3,0.2l9.9,6.9l1.9,3.9l4.4,0.6L450.9,217.9z",
+    name: "Ceará"
   },
-  RN: { 
-    d: "M475,255 L505,250 L510,275 L485,280 Z", 
-    name: "Rio Grande do Norte" 
+  RN: {
+    d: "M474.2,218.3l-2.6-2.1l-12.9,2.1l-4.9-1.7l-3.3-4.5l-4.4-0.6l-1.9-3.9l5.7-2.1l5.8,1.7l8.1-0.9l5.3,1.9l5.5,5.5L474.2,218.3z",
+    name: "Rio Grande do Norte"
   },
-  PB: { 
-    d: "M470,280 L510,275 L512,295 L475,300 Z", 
-    name: "Paraíba" 
+  PB: {
+    d: "M475.2,227.1l-0.3-4.1l-8.3,0.8l-8.4-3.1l-4.1,3.7l-0.9,4.1l8.3,0.5l5.3-2.2l5.8,1.9L475.2,227.1z",
+    name: "Paraíba"
   },
-  PE: { 
-    d: "M445,295 L515,285 L518,315 L450,325 Z", 
-    name: "Pernambuco" 
+  PE: {
+    d: "M475.1,251.1l-1.5-5.9l-2.9-1.5l-3.3,2.2l-1.5-3.4l0.9-5.7l4.1-5.1l4.2,0.9l-2.6-5.9l-5.8-1.9l-5.3,2.2l-8.3-0.5l-1.3,2.3l-6.9-0.5l-4.9,0.4l-4.4,3.5l3.3,5.7l-1.1,4.3l-4.5,1.7l2.2,7.1l5.9,0.3l4.1-1.4l31.6-0.2L475.1,251.1z",
+    name: "Pernambuco"
   },
-  AL: { 
-    d: "M485,320 L510,315 L515,340 L490,345 Z", 
-    name: "Alagoas" 
+  AL: {
+    d: "M476.7,255.2l-1.6-4.1l-31.6,0.2l-1.7,5.2l3.9,1.5l6.5,0.2l5.8-2.1l8.6,2.3l5.6-1.3L476.7,255.2z",
+    name: "Alagoas"
   },
-  SE: { 
-    d: "M475,345 L500,340 L505,360 L480,365 Z", 
-    name: "Sergipe" 
+  SE: {
+    d: "M468.6,268.6l-4.8-5.1l-5.3-1.2l-5.3,1.3l-2.6,4.7l4.6,4.5l7.2-0.8L468.6,268.6z",
+    name: "Sergipe"
   },
-  BA: { 
-    d: "M400,320 L480,300 L500,360 L480,420 L410,430 L380,385 Z", 
-    name: "Bahia" 
+  BA: {
+    d: "M451.9,348.6l0.6-5.2l-3.3-6.2l0.3-3.2l-5-6.7l-1.5-7l2.6-10.7l-2.8-3.2l0.2-3.2l3.7-2l0.2-4.7l-4.5-4.5l-1.6-5.2l2.7-2.4l-6.2-7.2l-3.5,0.9l-3.3-6.6l-1-6.1l-2.2-7.1l4.5-1.7l1.1-4.3l-3.3-5.7l4.4-3.5l4.9-0.4l6.9,0.5l1.3-2.3l0.9-4.1l4.1-3.7l8.4,3.1l8.3-0.8l0.3,4.1l-1.9,3.5l2.6,5.9l-4.2-0.9l-4.1,5.1l-0.9,5.7l1.5,3.4l3.3-2.2l2.9,1.5l1.5,5.9l2.8,2.1l-4.5,2.1l-8.6-2.3l-5.8,2.1l-6.5-0.2l-3.9-1.5l1.7-5.2l-4.1,1.4l-5.9-0.3l4.8,5.1l-6.2,3.4l2.6-4.7l5.3-1.3l5.3,1.2l-7.2,0.8l-4.6-4.5l3.3,6.6l-0.2,12.7l1.1-1.1l0.7-5.7l-4.6-4.5l-0.2-6.4l-3.7-4.5l-0.9-5.5l1.6-6.5l-2.1-4.7l0.7-3.8l-6.6-0.3l2.1,3.5l7.7-0.3l7.6-10.1l3.2-0.9l-1.1,1.1l0.3,2.9l4.3-0.2l2.7,0.5l3.3-2.3l5,3.8l-1.5,6.1l0.5,3.9l6.7,9.4l0.3,3.5l-3.9,6.1l0.7,7.5l-5.7,5.5l0.2,4.7l-4.5,4.7l1.4,6.7l-3.1,3.3l5,10.5l-0.2,7.9l4.6,1.6l4.1,6.5l7.7,3.5l7.7-0.4l6.1,2.7l-2.9,5.8l-7.6,3.1l-7.9-0.9l-5.5,3.8l-7.3-0.8L451.9,348.6z",
+    name: "Bahia"
   },
-  MT: { 
-    d: "M200,290 L290,280 L320,290 L325,380 L260,400 L200,380 Z", 
-    name: "Mato Grosso" 
+  MT: {
+    d: "M297.4,339.7l-5.9-1.1l-3.5,1.3l-3.5-1.5l-7.5,0.5l-3.5-2.9l-5.4,0.7l-4.3-5.5l-7.6-1.1l-2.9-6.9l-10.1-10.4l-3.5-8.7l-0.3-6.9l-3.1-4.7l1.7-10.9l-2.6-1.7l0.5-7.9l6.9-0.8l2.5-4.7l-0.7-3.7l0.5-3.5l-2.7-4.7l3.7-3.3l0.7-4.5l5.9-1.9l0.5-2.7l8.2,0.2l6.1,3.9l3.1-2.5l6.5,1.1l2.3-3.9l-1-6.7l2.9-4.6l7.8,0.3l0.5,4.9l4.1,1.9l3.1,3.9l4.9,0.3l5,2.1l6.9-3.6l2.3,0.7l3-2.9l3.1,0.4l3.7-1.9l4.2,0.9l-1.8,5.3l2.6,3.9l5.5,1.9l1.3,6.7l5.3-0.5l1.9-3.4l-0.5-2.8l3.3-4.1l4.3,3.9l2.6-0.7l1.2,2.5l4.6-4.9l7.5-0.2l2.7-3.1l0.8,21.4l-3.1,0.7l0.1,57.2l-4.7-0.2l-5.5-4.4l-6.5,0.7l-4.2,3.5l-3.8-0.5l-11.7,5.7l-0.7,3.4l-4.5,3.9l-2.1,6.5L297.4,339.7z",
+    name: "Mato Grosso"
   },
-  GO: { 
-    d: "M325,350 L390,340 L400,420 L350,440 L320,400 Z", 
-    name: "Goiás" 
+  GO: {
+    d: "M380.2,347.7l-4.6-1.1l-2.3,2.5l-4.9-4.7l-8.3,2l-2.7-2.4l-5.4,1.5l-0.3-4l-5.8-4.9l-1.4-5.7l-6.5-7.9l0.3-4.7l-2.7-2.1l1.5-7l2.1-6.5l4.5-3.9l0.7-3.4l11.7-5.7l3.8,0.5l4.2-3.5l6.5-0.7l5.5,4.4l4.7,0.2l0.3,3.7l4.9,0.2l2.1,4.7l9.7,1.1l2.5-2.4l8.9,0.5l-1.9,8.7l-2.9,1.5l1.8,9.8l-0.7,4.4l-4.2,3.1l1.2,5.9l-2.4,5.3l-5.7,2.3l2.4,8.4L380.2,347.7z",
+    name: "Goiás"
   },
-  DF: { 
-    d: "M365,385 L385,380 L390,400 L370,405 Z", 
-    name: "Distrito Federal" 
+  DF: {
+    d: "M377.5,314.9l-4.5,0.9l-3.9-3.5l0.2-5.5l4.4-1.3l4.7,3.1L377.5,314.9z",
+    name: "Distrito Federal"
   },
-  MS: { 
-    d: "M250,400 L320,390 L330,470 L270,490 L245,450 Z", 
-    name: "Mato Grosso do Sul" 
+  MS: {
+    d: "M319.7,412.2l-2.9-3.9l-7-3.5l-0.3-4.2l-4.7-1.7l-2.4-3.5l1.1-9.1l-2.3-1.7l-1.3-7.4l-6.9-2.9l-4.8-6.1l0.3-9.1l-2.1-6.5l5.3-2.2l3.7-5.5l2.1-6.5l4.4-0.8l5.9,1.1l-0.3,4.7l6.5,7.9l1.4,5.7l5.8,4.9l0.3,4l5.4-1.5l2.7,2.4l8.3-2l4.9,4.7l2.3-2.5l4.6,1.1l0.2,2.9l-5.4,4.2l-2.9,8.7l-0.5,6.4l4.5,5.9l-0.9,3.1l-3.9,0.9l-1.4,7.6l-9.6,6.3L319.7,412.2z",
+    name: "Mato Grosso do Sul"
   },
-  MG: { 
-    d: "M385,400 L470,380 L500,420 L485,490 L410,510 L375,470 Z", 
-    name: "Minas Gerais" 
+  MG: {
+    d: "M421.9,372.5l-2.6-1.2l-0.9-6.7l-7.9-2.7l-2.4-3.1l-8.1,1.1l-2.9-5.9l-2.4-8.4l5.7-2.3l2.4-5.3l-1.2-5.9l4.2-3.1l0.7-4.4l-1.8-9.8l2.9-1.5l1.9-8.7l5.9,4.1l7.2-0.8l2.6-4.7l5.3-1.3l5.3,1.2l4.8,5.1l6.2-3.4l-3.3-6.6l3.5-0.9l6.2,7.2l-2.7,2.4l1.6,5.2l4.5,4.5l-0.2,4.7l-3.7,2l-0.2,3.2l2.8,3.2l-2.6,10.7l1.5,7l5,6.7l-0.3,3.2l3.3,6.2l-0.6,5.2l-2.7,2.3l-1.5,5.6l4.7,6l-5.7,2.7l-3.3-0.7l-6.9,3.3l-1.9-1.5l-2.1,2.3l-5.1-5.7l-5.7,2.9l-7.3-3.1L421.9,372.5z",
+    name: "Minas Gerais"
   },
-  ES: { 
-    d: "M490,440 L520,430 L525,475 L495,485 Z", 
-    name: "Espírito Santo" 
+  ES: {
+    d: "M476.3,366.2l-4.7-6l1.5-5.6l2.7-2.3l7.3,0.8l5.5-3.8l7.9,0.9l3.4,8.4l-3.9,3.7l0.5,3.9l-3.2,9.9l-5.1,0.8l-5.3-5.3L476.3,366.2z",
+    name: "Espírito Santo"
   },
-  RJ: { 
-    d: "M460,490 L510,480 L520,510 L475,520 Z", 
-    name: "Rio de Janeiro" 
+  RJ: {
+    d: "M483.1,376l-6.8,5.5l-5.5,0.8l-9.5-3.9l-3.1,0.8l-7.3-5.5l5.7-2.9l5.1,5.7l2.1-2.3l1.9,1.5l6.9-3.3l3.3,0.7l5.7-2.7l5.3,5.3L483.1,376z",
+    name: "Rio de Janeiro"
   },
-  SP: { 
-    d: "M350,470 L430,455 L465,495 L440,540 L360,545 L340,510 Z", 
-    name: "São Paulo" 
+  SP: {
+    d: "M403.2,395.3l-5.5,0.3l-5.2-4.2l-8.7-0.9l-0.5-3.3l-7.4-2.4l-2.4,1.1l-5.9-5.9l-0.3-4.4l3.9-0.9l0.9-3.1l-4.5-5.9l0.5-6.4l2.9-8.7l5.4-4.2l-0.2-2.9l6.1,1.4l2.6,1.2l1.5,6.9l7.3,3.1l5.7-2.9l-2.1,2.3l7.3,5.5l3.1-0.8l9.5,3.9l5.5-0.8l6.8-5.5l-0.5,3.2l-3.4,3.9l-0.5,6.4l-4.9,2.9l-4.7,7.1l-6.1,2.4l-2.4,5.4L403.2,395.3z",
+    name: "São Paulo"
   },
-  PR: { 
-    d: "M310,510 L380,500 L400,545 L350,570 L305,550 Z", 
-    name: "Paraná" 
+  PR: {
+    d: "M368.5,417.1l-6.6,1.5l-6.9-2.9l-1.9-3.9l-7.4-2.4l-5.5,1.4l-9.1-2.1l-8.9-6.3l9.6-6.3l1.4-7.6l5.9-5.9l2.4-1.1l7.4,2.4l0.5,3.3l8.7,0.9l5.2,4.2l5.5-0.3l4.9,3.5l-2.4,5.4l-4.9,3.8l2.4,4.6l3.5,3.1L368.5,417.1z",
+    name: "Paraná"
   },
-  SC: { 
-    d: "M320,560 L380,550 L395,585 L345,600 L315,580 Z", 
-    name: "Santa Catarina" 
+  SC: {
+    d: "M377.9,445.7l-7.6-0.4l-9.9-7.5l-9.3,1.1l-5.3-5.5l-3.9,0.3l-2.4-5l5.5-3.1l6.9,2.9l6.6-1.5l3.9-4.3l-3.5-3.1l-2.4-4.6l4.9-3.8l7.9,4.2l5.1,0.6l2.4,3.1l-1.2,4.9l0.5,7.2l3.7,3.9l0.5,7.5L377.9,445.7z",
+    name: "Santa Catarina"
   },
-  RS: { 
-    d: "M290,590 L365,580 L380,640 L320,680 L270,650 Z", 
-    name: "Rio Grande do Sul" 
+  RS: {
+    d: "M340.4,498l-2.1-2.3l-6.7,0.3l-1.4-4.1l-5.9-3.5l-1.5-5.5l-6.4-4.9l1.1-3.1l-3.9-4.3l3.3-4.9l-0.7-7.7l5.1-6.3l7.7-4.3l3.9-0.3l5.3,5.5l9.3-1.1l9.9,7.5l7.6,0.4l2.4-3.3l-0.5-7.5l5.7,0.8l4.7,4l-0.2,8.5l-4.4,3.1l-0.9,9.3l-5.4,7.5l-8.4,9.1l-5.7,1.4l-3.2,4.5l-5.7-1.5L340.4,498z",
+    name: "Rio Grande do Sul"
   },
-  RO: { 
-    d: "M145,290 L200,280 L210,340 L175,360 L140,340 Z", 
-    name: "Rondônia" 
+  RO: {
+    d: "M244.5,266.1l-2.4,2.7l-6.9-1.9l-4.9,3.1l-4.9-0.5l-0.9-5.3l-5.9-2.6l-0.8-3.2l-4.6-2.7l-3.9-5.7l-4.9-1.5l-9.7-0.3l-8.5-2l3.5-2.1l2.5-4.7l-0.7-3.7l0.5-3.5l3.9-2.3l6.7,0.9l6.1,3.9l3.1-2.5l6.5,1.1l2.3-3.9l-1-6.7l2.9-4.6l5.5,0.1l1.7-4.5l7.3-0.6l2.9-4.6l5.1-0.3l2.7,3.9l1.9,6.5l6.1,3.7l0.2,4.9l-2.5,4.7l-6.9,0.8l-0.5,7.9l2.6,1.7l-1.7,10.9l3.1,4.7l0.3,6.9L244.5,266.1z",
+    name: "Rondônia"
   },
 };
 
 const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
   const { toggleArrayFilter, filters } = useFilters();
-  
+
   const maxValue = Math.max(...Object.values(stateData), 1);
 
   const getColor = (value: number) => {
-    if (value === 0) return 'hsl(45, 30%, 20%)';
+    if (value === 0) return 'hsl(199, 30%, 20%)';
     const intensity = value / maxValue;
     const lightness = 25 + (intensity * 35);
-    return `hsl(45, 100%, ${lightness}%)`;
+    return `hsl(199, 89%, ${lightness}%)`;
   };
 
   const handleStateClick = (state: string) => {
     toggleArrayFilter('states', state);
   };
 
-  // Calculate label positions (center of bounding box for each path)
-  const getLabelPosition = (d: string) => {
-    const numbers = d.match(/\d+/g)?.map(Number) || [];
-    if (numbers.length < 4) return { x: 0, y: 0 };
-    
-    const xs = numbers.filter((_, i) => i % 2 === 0);
-    const ys = numbers.filter((_, i) => i % 2 === 1);
-    
-    return {
-      x: (Math.min(...xs) + Math.max(...xs)) / 2,
-      y: (Math.min(...ys) + Math.max(...ys)) / 2
-    };
-  };
-
   return (
     <div className="dashboard-card h-full animate-scale-in flex flex-col">
       <h3 className="dashboard-card-title">Pedidos | Estado</h3>
-      
+
       <div className="flex-1 relative flex justify-center items-center min-h-0">
-        <svg viewBox="50 100 520 620" className="w-full h-full max-h-[280px]" preserveAspectRatio="xMidYMid meet">
+        <svg
+          viewBox="70 60 430 460"
+          className="w-full h-full"
+          preserveAspectRatio="xMidYMid meet"
+          style={{ maxHeight: '240px' }}
+        >
           {Object.entries(statePaths).map(([state, { d, name }]) => {
             const value = stateData[state] || 0;
             const isActive = filters.states.length === 0 || filters.states.includes(state);
-            const pos = getLabelPosition(d);
-            
+
             return (
-              <g key={state} onClick={() => handleStateClick(state)} className="cursor-pointer group">
+              <g
+                key={state}
+                onClick={() => handleStateClick(state)}
+                className="cursor-pointer group"
+              >
                 <path
                   d={d}
                   fill={getColor(value)}
-                  stroke="hsl(45, 100%, 50%)"
-                  strokeWidth="1"
+                  stroke="hsl(199, 89%, 48%)"
+                  strokeWidth="0.5"
                   className={`transition-all duration-300 hover:brightness-125 ${
                     isActive ? 'opacity-100' : 'opacity-30'
-                  } ${filters.states.includes(state) ? 'stroke-2' : ''}`}
+                  } ${filters.states.includes(state) ? 'stroke-[1.5]' : ''}`}
                 />
-                <text
-                  x={pos.x}
-                  y={pos.y}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className="text-[9px] font-bold pointer-events-none select-none"
-                  fill={value > maxValue * 0.5 ? 'hsl(0, 0%, 4%)' : 'hsl(45, 100%, 50%)'}
-                >
-                  {state}
-                </text>
-                {/* Tooltip */}
                 <title>{name}: {value} pedidos</title>
               </g>
             );
@@ -194,21 +177,24 @@ const BrazilMap: React.FC<BrazilMapProps> = ({ stateData }) => {
       {/* Legend */}
       <div className="flex items-center justify-center gap-2 mt-2 pt-2 border-t border-muted">
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(45, 100%, 25%)' }} />
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 25%)' }} />
           <span className="text-[10px] text-muted-foreground">Menos</span>
         </div>
-        <div className="w-12 h-3 rounded" style={{ 
-          background: 'linear-gradient(to right, hsl(45, 100%, 25%), hsl(45, 100%, 60%))' 
-        }} />
+        <div
+          className="w-12 h-3 rounded"
+          style={{
+            background: 'linear-gradient(to right, hsl(199, 89%, 25%), hsl(199, 89%, 60%))',
+          }}
+        />
         <div className="flex items-center gap-1">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(45, 100%, 60%)' }} />
+          <div className="w-3 h-3 rounded" style={{ backgroundColor: 'hsl(199, 89%, 60%)' }} />
           <span className="text-[10px] text-muted-foreground">Mais</span>
         </div>
       </div>
 
       {filters.states.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1 justify-center">
-          {filters.states.map(state => (
+          {filters.states.map((state) => (
             <button
               key={state}
               onClick={() => handleStateClick(state)}
