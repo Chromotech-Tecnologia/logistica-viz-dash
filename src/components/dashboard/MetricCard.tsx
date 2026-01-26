@@ -28,7 +28,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   return (
-    <div className={cn('dashboard-card animate-fade-in', className)}>
+    <div className={cn('dashboard-card animate-fade-in h-full', className)}>
       <h3 className="dashboard-card-title">{title}</h3>
       <div className="flex items-baseline gap-2">
         <span className={cn(

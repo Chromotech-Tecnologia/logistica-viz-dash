@@ -126,55 +126,49 @@ const DashboardContent: React.FC = () => {
             <ItemsTable items={filteredItems} />
           </div>
 
-          {/* Desktop Layout - Matching Reference Image */}
+          {/* Desktop Layout - Grid com alturas fixas por linha */}
           <div className="hidden lg:grid grid-cols-12 gap-3">
-            {/* Row 1: Metrics + Pie Chart + Table */}
-            <div className="col-span-2 flex flex-col gap-3">
-              <div className="min-h-[120px]">
-                <MetricCard
-                  title="Quantidade de Pedidos"
-                  value={metrics.total}
-                  size="lg"
-                />
-              </div>
-              <div className="min-h-[90px]">
-                <MetricCard
-                  title="Qtde no Prazo"
-                  value={metrics.noPrazo}
-                  percentage={`${metrics.percentualNoPrazo.toFixed(2)}%`}
-                  variant="success"
-                  size="sm"
-                />
-              </div>
-              <div className="min-h-[90px]">
-                <MetricCard
-                  title="Qtde fora do Prazo"
-                  value={metrics.foraPrazo}
-                  percentage={`${metrics.percentualForaPrazo.toFixed(2)}%`}
-                  variant={metrics.percentualForaPrazo > 5 ? 'danger' : 'default'}
-                  size="sm"
-                />
-              </div>
+            {/* Linha 1 - Altura fixa de 320px */}
+            <div className="col-span-2 grid grid-rows-3 gap-3 h-[320px]">
+              <MetricCard
+                title="Quantidade de Pedidos"
+                value={metrics.total}
+                size="lg"
+              />
+              <MetricCard
+                title="Qtde no Prazo"
+                value={metrics.noPrazo}
+                percentage={`${metrics.percentualNoPrazo.toFixed(2)}%`}
+                variant="success"
+                size="sm"
+              />
+              <MetricCard
+                title="Qtde fora do Prazo"
+                value={metrics.foraPrazo}
+                percentage={`${metrics.percentualForaPrazo.toFixed(2)}%`}
+                variant={metrics.percentualForaPrazo > 5 ? 'danger' : 'default'}
+                size="sm"
+              />
             </div>
             
-            <div className="col-span-2 min-h-[320px]">
+            <div className="col-span-2 h-[320px]">
               <RegionPieChart data={regionData} />
             </div>
 
-            <div className="col-span-5 min-h-[320px]">
+            <div className="col-span-5 h-[320px]">
               <PedidosTable pedidos={filteredPedidos} title="Pedidos Consolidados" />
             </div>
 
-            <div className="col-span-3 min-h-[320px]">
+            <div className="col-span-3 h-[320px]">
               <BrazilMap stateData={stateData} />
             </div>
 
-            {/* Row 2: Status, Bar Charts, Performance, Items Table */}
-            <div className="col-span-2 min-h-[260px]">
+            {/* Linha 2 - Altura fixa de 280px */}
+            <div className="col-span-2 h-[280px]">
               <StatusCard data={statusData} />
             </div>
             
-            <div className="col-span-2 min-h-[260px]">
+            <div className="col-span-2 h-[280px]">
               <HorizontalBarChart
                 data={serviceTypeData}
                 title="Pedidos | Tipo de Serviço"
@@ -182,11 +176,11 @@ const DashboardContent: React.FC = () => {
               />
             </div>
 
-            <div className="col-span-2 min-h-[260px]">
+            <div className="col-span-2 h-[280px]">
               <PerformanceGauge percentage={metrics.percentualNoPrazo} />
             </div>
             
-            <div className="col-span-2 min-h-[260px]">
+            <div className="col-span-2 h-[280px]">
               <HorizontalBarChart
                 data={modalityData}
                 title="Pedidos | Modalidade"
@@ -194,7 +188,7 @@ const DashboardContent: React.FC = () => {
               />
             </div>
 
-            <div className="col-span-4 min-h-[260px]">
+            <div className="col-span-4 h-[280px]">
               <ItemsTable items={filteredItems} />
             </div>
           </div>

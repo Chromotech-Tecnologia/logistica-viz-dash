@@ -40,57 +40,57 @@ const RegionPieChart: React.FC<RegionPieChartProps> = ({ data }) => {
   };
 
   return (
-    <div className="dashboard-card h-full animate-slide-up">
+    <div className="dashboard-card h-full animate-slide-up flex flex-col">
       <h3 className="dashboard-card-title">Pedido | Região</h3>
       
-      <div className="flex items-center justify-between gap-4">
-        <div className="h-48 flex-1">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={40}
-                outerRadius={70}
-                paddingAngle={2}
-                dataKey="value"
-                onClick={(_, index) => handleClick(data[index])}
-                className="cursor-pointer"
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                    stroke="transparent"
-                    opacity={filters.regions.length === 0 || filters.regions.includes(entry.name) ? 1 : 0.3}
-                    className="transition-opacity duration-300"
-                  />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          {data.map((entry, index) => (
-            <button
-              key={entry.name}
-              onClick={() => handleClick(entry)}
-              className={`flex items-center gap-2 text-left transition-opacity duration-200 ${
-                filters.regions.length > 0 && !filters.regions.includes(entry.name) ? 'opacity-40' : ''
-              }`}
+      {/* Gráfico centralizado com altura adequada */}
+      <div className="flex-1 flex items-center justify-center min-h-[160px]" style={{ overflow: 'visible' }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius="30%"
+              outerRadius="60%"
+              paddingAngle={1}
+              dataKey="value"
+              onClick={(_, index) => handleClick(data[index])}
+              className="cursor-pointer"
             >
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: COLORS[index] }}
-              />
-              <span className="text-xs text-muted-foreground">{entry.name}</span>
-              <span className="text-xs text-card-foreground font-medium">{entry.percentage}%</span>
-            </button>
-          ))}
-        </div>
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                  stroke="transparent"
+                  opacity={filters.regions.length === 0 || filters.regions.includes(entry.name) ? 1 : 0.3}
+                  className="transition-opacity duration-300"
+                />
+              ))}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Legenda abaixo do gráfico */}
+      <div className="flex flex-col gap-1 pt-2 border-t border-muted mt-auto">
+        {data.map((entry, index) => (
+          <button
+            key={entry.name}
+            onClick={() => handleClick(entry)}
+            className={`flex items-center gap-2 text-left transition-opacity duration-200 ${
+              filters.regions.length > 0 && !filters.regions.includes(entry.name) ? 'opacity-40' : ''
+            }`}
+          >
+            <div
+              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+              style={{ backgroundColor: COLORS[index] }}
+            />
+            <span className="text-[10px] text-muted-foreground">{entry.name}</span>
+            <span className="text-[10px] text-card-foreground font-medium ml-auto">{entry.percentage}%</span>
+          </button>
+        ))}
       </div>
     </div>
   );
