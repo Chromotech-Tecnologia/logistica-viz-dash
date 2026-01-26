@@ -253,8 +253,8 @@ const ItemsTable: React.FC<ItemsTableProps> = ({ items }) => {
 
   return (
     <>
-      <div className="dashboard-card animate-fade-in h-full min-h-[380px]">
-        <TableContent maxHeight={280} />
+      <div className="dashboard-card animate-fade-in h-full flex flex-col overflow-hidden">
+        <TableContent maxHeight={140} />
       </div>
 
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>

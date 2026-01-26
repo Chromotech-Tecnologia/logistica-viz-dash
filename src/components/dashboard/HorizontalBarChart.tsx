@@ -23,10 +23,10 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ data, title, fi
   };
 
   return (
-    <div className="dashboard-card animate-slide-up h-full flex flex-col">
+    <div className="dashboard-card animate-slide-up h-full flex flex-col overflow-hidden">
       <h3 className="dashboard-card-title">{title}</h3>
       
-      <div className="space-y-3">
+      <div className="flex-1 overflow-hidden flex flex-col justify-center gap-2">
         {data.map((item, index) => {
           const percentage = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
           const isActive = activeFilters.length === 0 || activeFilters.includes(item.name);
@@ -43,7 +43,7 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ data, title, fi
                 <span className="text-xs text-card-foreground font-medium">{item.name}</span>
                 <span className="text-xs text-primary font-bold">{item.value}</span>
               </div>
-              <div className="h-5 bg-muted rounded-sm overflow-hidden">
+              <div className="h-4 bg-muted rounded-sm overflow-hidden flex-shrink-0">
                 <div
                   className="h-full bg-primary rounded-sm transition-all duration-500 ease-out hover:brightness-110"
                   style={{
