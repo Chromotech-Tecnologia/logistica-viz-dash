@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
 
   const tabs = [
     { id: 'estoque' as const, label: 'Estoque', icon: Package },
-    { id: 'tracking' as const, label: 'Tracking Entrega', icon: Truck },
+    { id: 'tracking' as const, label: 'Entrega', icon: Truck },
     { id: 'faturamento' as const, label: 'Faturamento', icon: Receipt },
   ];
 
