@@ -51,8 +51,8 @@ const Header: React.FC<HeaderProps> = ({ activeTab, onTabChange }) => {
       <div className="flex items-center justify-between max-w-[1800px] mx-auto">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 lg:w-12 lg:h-12 bg-primary-foreground rounded-lg flex items-center justify-center">
-            <span className="text-primary font-black text-xl lg:text-2xl">99</span>
+          <div className="px-3 py-2 lg:px-4 lg:py-2.5 bg-primary-foreground rounded-lg flex items-center justify-center">
+            <span className="text-primary font-black text-sm lg:text-base">Logotipo</span>
           </div>
         </div>
 
